@@ -12,6 +12,9 @@ class RubyCalculator < CalculatorCommand
 
     if operation == 'repeat'
       repeat(inputs.first.to_i, repeat_index)
+    elsif operation == 'cancel'
+      cancel
+      repeat_index = 0 # to make operation cancel not saved in history
     else
       inputs = convert_to_float(inputs).unshift(@result)
       super operation, inputs
@@ -32,6 +35,10 @@ class RubyCalculator < CalculatorCommand
     end
 
     @result
+  end
+
+  def cancel
+    @result = 0.0
   end
 
   def convert_to_float(strings)

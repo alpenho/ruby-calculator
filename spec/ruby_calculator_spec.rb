@@ -52,6 +52,16 @@ describe RubyCalculator do
         expect(subject.command('repeat 4')).to eql(63.0)
       end
     end
+
+    context 'cancel' do
+      it 'should reset the result value and not put the command to history' do
+        expect(subject.command('add 3')).to eql(3.0)
+        expect(subject.command('add 5')).to eql(8.0)
+        expect(subject.command('cancel')).to eql(0.0)
+        expect(subject.history).to eql(['add 3', 'add 5'])
+        expect(subject.result).to eql(0.0)
+      end
+    end
   end
 
   context 'convert_to_float' do

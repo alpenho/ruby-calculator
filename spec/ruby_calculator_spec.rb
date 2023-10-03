@@ -11,12 +11,25 @@ describe RubyCalculator do
   end
 
   context 'command' do
-    it 'should put command string into history array' do
+    it 'should call convert_to_float function' do
+      expect(subject).to receive(:convert_to_float).with(['3']).and_return([3.0])
+      subject.command('add 3')
+    end
+
+    it 'should run the command string and put that into history array' do
       expect(subject.command('add 3')).to eql(3.0)
       expect(subject.history).to eql(['add 3'])
+      expect(subject.result).to eql(3.0)
     end
 
     context 'repeat' do
+      it 'should call repeat function' do
+        expect(subject.command('add 3')).to eql(3.0)
+        expect(subject.command('add 5')).to eql(8.0)
+        expect(subject).to receive(:repeat).with(2, nil)
+        subject.command('repeat 2')
+      end
+
       it 'should calculate correctly' do
         expect(subject.command('add 3')).to eql(3.0)
         expect(subject.command('add 5')).to eql(8.0)
@@ -43,11 +56,11 @@ describe RubyCalculator do
 
   context 'convert_to_float' do
     it 'should return list of float number' do
-      expect(subject.convert_to_float!(['1', '2.4', '3'])).to eql([1.0, 2.4, 3.0])
+      expect(subject.convert_to_float(['1', '2.4', '3'])).to eql([1.0, 2.4, 3.0])
     end
 
     it 'should return empty list when arguments is empty list' do
-      expect(subject.convert_to_float!([])).to eql([])
+      expect(subject.convert_to_float([])).to eql([])
     end
   end
 end

@@ -9,25 +9,25 @@ class RubyCalculator < CalculatorCommand
   def command(command_string, repeat_index: nil)
     inputs = command_string.split(' ')
     operation = inputs.shift
+    first_input = @result
+    first_input = repeat_index if operation == 'repeat'
+    repeat_index = 0 if operation == 'cancel' # to make operation cancel not saved in history
 
-    if operation == 'repeat'
-      repeat(inputs.first.to_i, repeat_index)
-    elsif operation == 'cancel'
-      cancel
-      repeat_index = 0 # to make operation cancel not saved in history
-    else
-      inputs = convert_to_float(inputs).unshift(@result)
+    begin
+      inputs = convert_to_float(inputs).unshift(first_input)
       super operation, inputs
-    end
 
-    # put the command string to history if this command is being run by user, not by repeat
-    @history << command_string if repeat_index.nil?
-    @result
+      # put the command string to history if this command is being run by user, not by repeat
+      @history << command_string if repeat_index.nil?
+      @result
+    rescue ArgumentError => error
+      error.message
+    end
   end
 
-  def repeat(number, repeat_index)
+  def repeat(repeat_index, number)
     repeat_index = @history.length if repeat_index.nil?
-    start_index = repeat_index - number
+    start_index = repeat_index - number.to_i
 
     @history[start_index..repeat_index - 1].each do |command_string|
       command(command_string, repeat_index: start_index)
@@ -37,8 +37,8 @@ class RubyCalculator < CalculatorCommand
     @result
   end
 
-  def cancel
-    @result = 0.0
+  def cancel(number)
+    0.0
   end
 
   def convert_to_float(strings)

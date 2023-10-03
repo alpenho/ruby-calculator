@@ -22,11 +22,25 @@ describe RubyCalculator do
       expect(subject.result).to eql(3.0)
     end
 
+    context 'ArgumentError raised' do
+      it 'should rescue the error and return error message' do
+        expect { subject.command('add 3 4') }.not_to raise_error
+        expect(subject.command('add 3 4')).to eql('wrong number of arguments (given 3, expected 2)')
+      end
+
+      it 'should not put the command to history and result will still be the same as previous value' do
+        expect(subject.command('add 3')).to eql(3.0)
+        subject.command('add 3 4')
+        expect(subject.history).to eql(['add 3'])
+        expect(subject.result).to eql(3.0)
+      end
+    end
+
     context 'repeat' do
       it 'should call repeat function' do
         expect(subject.command('add 3')).to eql(3.0)
         expect(subject.command('add 5')).to eql(8.0)
-        expect(subject).to receive(:repeat).with(2, nil)
+        expect(subject).to receive(:repeat).with(nil, 2)
         subject.command('repeat 2')
       end
 
@@ -36,7 +50,7 @@ describe RubyCalculator do
         expect(subject.command('repeat 2')).to eql(16.0)
       end
 
-      it 'should not put command string into history array' do
+      it 'should not put repeated command string into history array' do
         expect(subject.command('add 3')).to eql(3.0)
         expect(subject.command('add 5')).to eql(8.0)
         expect(subject.command('repeat 2')).to eql(16.0)
@@ -54,6 +68,13 @@ describe RubyCalculator do
     end
 
     context 'cancel' do
+      it 'should call cancel function' do
+        expect(subject.command('add 3')).to eql(3.0)
+        expect(subject.command('add 5')).to eql(8.0)
+        expect(subject).to receive(:cancel).with(8.0)
+        subject.command('cancel')
+      end
+
       it 'should reset the result value and not put the command to history' do
         expect(subject.command('add 3')).to eql(3.0)
         expect(subject.command('add 5')).to eql(8.0)

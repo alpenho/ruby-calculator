@@ -36,6 +36,20 @@ describe RubyCalculator do
       end
     end
 
+    context 'NoMethodError raised' do
+      it 'should rescue the error and return custom error message' do
+        expect { subject.command('asd 3') }.not_to raise_error
+        expect(subject.command('asd 3')).to eql(RubyCalculator::NO_METHOD_CUSTOM_MESSAGE)
+      end
+
+      it 'should not put the command to history and result will still be the same as previous value' do
+        expect(subject.command('add 3')).to eql(3.0)
+        subject.command('asd 3')
+        expect(subject.history).to eql(['add 3'])
+        expect(subject.result).to eql(3.0)
+      end
+    end
+
     context 'repeat' do
       it 'should call repeat function' do
         expect(subject.command('add 3')).to eql(3.0)

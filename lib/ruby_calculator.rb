@@ -1,6 +1,10 @@
 class RubyCalculator < CalculatorCommand
   attr_accessor :result, :history
 
+  REPEAT_COMMAND = 'repeat'.freeze
+  CANCEL_COMMAND = 'cancel'.freeze
+  NO_METHOD_CUSTOM_MESSAGE = 'There is no command like that, please use the available command'.freeze
+
   def initialize
     @result = 0.0
     @history = []
@@ -10,8 +14,8 @@ class RubyCalculator < CalculatorCommand
     inputs = command_string.split(' ')
     operation = inputs.shift
     first_input = @result
-    first_input = repeat_index if operation == 'repeat'
-    repeat_index = 0 if operation == 'cancel' # to make operation cancel not saved in history
+    first_input = repeat_index if operation == REPEAT_COMMAND
+    repeat_index = 0 if operation == CANCEL_COMMAND # to make operation cancel not saved in history
 
     begin
       inputs = convert_to_float(inputs).unshift(first_input)
@@ -22,6 +26,8 @@ class RubyCalculator < CalculatorCommand
       @result
     rescue ArgumentError => error
       error.message
+    rescue NoMethodError => error
+      NO_METHOD_CUSTOM_MESSAGE
     end
   end
 

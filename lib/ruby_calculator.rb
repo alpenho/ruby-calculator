@@ -24,7 +24,7 @@ class RubyCalculator < CalculatorCommand
       # put the command string to history if this command is being run by user, not by repeat
       @history << command_string if repeat_index.nil?
       @result
-    rescue ArgumentError => error
+    rescue ArgumentError, ZeroDivisionError, Math::DomainError => error
       error.message
     rescue NoMethodError => error
       NO_METHOD_CUSTOM_MESSAGE

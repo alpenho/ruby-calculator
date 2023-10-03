@@ -36,6 +36,36 @@ describe RubyCalculator do
       end
     end
 
+    context 'ZeroDivisionError raised' do
+      it 'should rescue the error and return error message' do
+        expect(subject.command('add 3')).to eql(3.0)
+        expect { subject.command('divide 0') }.not_to raise_error
+        expect(subject.command('divide 0')).to eql(SimpleMathOperation::ZERO_DIVISION_CUSTOM_ERROR)
+      end
+
+      it 'should not put the command to history and result will still be the same as previous value' do
+        expect(subject.command('add 3')).to eql(3.0)
+        subject.command('divide 0')
+        expect(subject.history).to eql(['add 3'])
+        expect(subject.result).to eql(3.0)
+      end
+    end
+
+    context 'Math::DomainError raised' do
+      it 'should rescue the error and return error message' do
+        expect(subject.command('subtract 9')).to eql(-9.0)
+        expect { subject.command('sqrt') }.not_to raise_error
+        expect(subject.command('sqrt')).to eql('Numerical argument is out of domain - sqrt')
+      end
+
+      it 'should not put the command to history and result will still be the same as previous value' do
+        expect(subject.command('subtract 9')).to eql(-9.0)
+        subject.command('sqrt')
+        expect(subject.history).to eql(['subtract 9'])
+        expect(subject.result).to eql(-9.0)
+      end
+    end
+
     context 'NoMethodError raised' do
       it 'should rescue the error and return custom error message' do
         expect { subject.command('asd 3') }.not_to raise_error

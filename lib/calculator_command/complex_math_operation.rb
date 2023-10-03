@@ -1,4 +1,6 @@
 module ComplexMathOperation
+  INPUT_CUSTOM_ERROR = 'Input should be float'.freeze
+
   def sqrt(number)
     validate_complex_math_input!(number)
     Math.sqrt(number)
@@ -22,6 +24,6 @@ module ComplexMathOperation
   private
 
   def validate_complex_math_input!(number)
-    raise 'Input should be float' unless number.is_a?(Float)
+    raise INPUT_CUSTOM_ERROR unless number.is_a?(Float)
   end
 end

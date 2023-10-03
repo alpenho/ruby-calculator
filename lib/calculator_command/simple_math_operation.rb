@@ -1,4 +1,7 @@
 module SimpleMathOperation
+  INPUT_CUSTOM_ERROR = 'Input should be float'.freeze
+  ZERO_DIVISION_CUSTOM_ERROR = 'divided by 0'.freeze
+
   def add(first_number, second_number)
     validate_simple_math_input!(first_number, second_number)
     first_number + second_number
@@ -33,10 +36,10 @@ module SimpleMathOperation
   private
 
   def validate_simple_math_input!(*numbers)
-    raise 'Input should be float' unless numbers.all? { |number| number.is_a?(Float) }
+    raise INPUT_CUSTOM_ERROR unless numbers.all? { |number| number.is_a?(Float) }
   end
 
   def validate_divisor!(number)
-    raise ZeroDivisionError.new('divided by 0') if number == 0.0
+    raise ZeroDivisionError.new(ZERO_DIVISION_CUSTOM_ERROR) if number == 0.0
   end
 end

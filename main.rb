@@ -1,7 +1,7 @@
 Dir[File.dirname(__FILE__) + '/lib/**/*.rb'].each {|file| require file }
 
 puts <<-TEXT
-This is a ruby calculator, at first it will zero.
+This is a ruby calculator, at first it will be zero.
 The format is like this: <command><space><number> (some command doesn't need number)
 Please type in these commands:
 1. add<space><number> (Any number, integer or decimal)

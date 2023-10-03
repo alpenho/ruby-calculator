@@ -73,4 +73,21 @@ describe RubyCalculator do
       expect(subject.convert_to_float([])).to eql([])
     end
   end
+
+  context 'happy path test' do
+    it 'should return all the expected value' do
+      expect(subject.command('add 2')).to eql(2.0)
+      expect(subject.command('neg')).to eql(-2.0)
+      expect(subject.command('sqr')).to eql(4.0)
+      expect(subject.command('multiply 2')).to eql(8.0)
+      expect(subject.command('repeat 2')).to eql(128.0)
+      expect(subject.command('divide 2')).to eql(64.0)
+      expect(subject.command('sqrt')).to eql(8.0)
+      expect(subject.command('cube')).to eql(512.0)
+      expect(subject.command('cubert')).to eql(8.0)
+      expect(subject.command('subtract 10')).to eql(-2.0)
+      expect(subject.command('abs')).to eql(2.0)
+      expect(subject.command('cancel')).to eql(0.0)
+    end
+  end
 end
